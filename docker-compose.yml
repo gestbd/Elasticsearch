@@ -4,13 +4,13 @@ services:
 
     # text-oriented database
     elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+      image: elasticsearch:8.10.2
       ports:
         - 9200:9200      
       environment:
         discovery.type: single-node
-      #volumes:
-      #  - ./es-data:/usr/share/elasticsearch/data
+      volumes:
+        - ./es-data:/usr/share/elasticsearch/data
       networks:
         - gestbd_net
 
