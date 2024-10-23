@@ -1,0 +1,28 @@
+services:
+  jupyterlab:
+    image: jupyter/pyspark-notebook:notebook-7.0.6
+    container_name: jupyterlab
+    ports:
+      - 8889:8888
+    volumes:
+      - ./data:/home/jovyan/work
+      - ./jars:/home/jovyan/jars
+    environment:
+      - PYSPARK_SUBMIT_ARGS=--jars /home/jovyan/jars/elasticsearch-spark-30_2.12-7.15.2.jar pyspark-shell
+    command: ["start-notebook.sh","--NotebookApp.token=''","--NotebookApp.password=''"]  
+    networks:
+      - gestbd_net
+  elasticsearch:
+      image: elasticsearch:7.17.25
+      ports:
+        - 9200:9200      
+      environment:
+        - discovery.type=single-node
+        - ES_JAVA_OPTS=-Xms512m -Xmx512m
+        - xpack.security.enabled=false
+      networks:
+        - gestbd_net    
+
+networks:
+    gestbd_net:
+      external: true  
